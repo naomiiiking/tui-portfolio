@@ -19,9 +19,16 @@ import (
 )
 
 const (
-	host = "0.0.0.0"
-	port = "22"
+	host        = "0.0.0.0"
+	defaultPort = "2222"
 )
+
+func serverPort() string {
+	if p := os.Getenv("PORT"); p != "" {
+		return p
+	}
+	return defaultPort
+}
 
 func teaHandler(s ssh.Session) (tea.Model, []tea.ProgramOption) {
 	pty, _, _ := s.Pty()
@@ -34,6 +41,7 @@ func main() {
 		log.Fatalln("could not create .ssh dir:", err)
 	}
 
+	port := serverPort()
 	s, err := wish.NewServer(
 		wish.WithAddress(net.JoinHostPort(host, port)),
 		wish.WithHostKeyPath(".ssh/id_ed25519"),

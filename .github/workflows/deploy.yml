@@ -3,6 +3,15 @@ name: Deploy
 on:
   push:
     branches: [main]
+  workflow_dispatch: {}
+
+# Admin SSH is on port 2200 (port 22 is served by the app itself).
+# We target the hostname rather than a pinned IP so deploys keep working
+# across the instance's ephemeral-IP changes, as long as the A-record is current.
+env:
+  DEPLOY_HOST: naomiking.xyz
+  DEPLOY_PORT: "2200"
+  DEPLOY_USER: opc
 
 jobs:
   deploy:
@@ -14,22 +23,35 @@ jobs:
         with:
           go-version-file: go.mod
 
-      - name: Build
-        run: GOOS=linux GOARCH=arm64 go build -o terminal-website .
+      # Server is x86-64 (Oracle Linux 9). Static build, no libc dependency.
+      - name: Build linux/amd64
+        run: GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o terminal-website .
 
-      - name: Copy binary
+      - name: Copy binary to server
         uses: appleboy/scp-action@v0.1.7
         with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USER }}
+          host: ${{ env.DEPLOY_HOST }}
+          port: ${{ env.DEPLOY_PORT }}
+          username: ${{ env.DEPLOY_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           source: terminal-website
-          target: /home/${{ secrets.SERVER_USER }}/
+          target: /tmp/
 
-      - name: Restart service
+      - name: Install binary and restart service
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USER }}
+          host: ${{ env.DEPLOY_HOST }}
+          port: ${{ env.DEPLOY_PORT }}
+          username: ${{ env.DEPLOY_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
-          script: sudo systemctl restart terminal-website
+          script: |
+            set -euo pipefail
+            sudo systemctl stop terminal-website
+            sudo mv /tmp/terminal-website /opt/terminal-website/terminal-website
+            sudo chown terminal:terminal /opt/terminal-website/terminal-website
+            sudo chmod +x /opt/terminal-website/terminal-website
+            # SELinux: a binary moved from /tmp keeps the wrong label and systemd
+            # then fails to exec it (203/EXEC). Relabel before starting.
+            sudo restorecon -v /opt/terminal-website/terminal-website
+            sudo systemctl start terminal-website
+            sudo systemctl is-active terminal-website

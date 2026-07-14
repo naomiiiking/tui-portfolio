@@ -1,0 +1,21 @@
+[Unit]
+Description=Terminal Website (SSH TUI)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=terminal
+Group=terminal
+WorkingDirectory=/opt/terminal-website
+Environment=PORT=22
+ExecStart=/opt/terminal-website/terminal-website
+# Allow binding the privileged port 22 without running as root
+AmbientCapabilities=CAP_NET_BIND_SERVICE
+CapabilityBoundingSet=CAP_NET_BIND_SERVICE
+NoNewPrivileges=true
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
