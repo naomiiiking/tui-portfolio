@@ -78,20 +78,6 @@ var Skills = []Skill{
 	},
 }
 
-type Project struct {
-	Title   string
-	Description string
-	Link	string
-}
-
-var Projects = []Project{
-	{
-		Title: "F1 Prediction Model",
-		Description: "My first ML project. A quali and live race XGBoost model trained on OpenF1 data.",
-		Link: "https://github.com/naomiiiking/f1-prediction-model",
-	},
-}
-
 type Link struct {
 	Label string
 	URL   string
@@ -100,7 +86,6 @@ type Link struct {
 var Links = []Link{
 	{Label: "github", URL: "https://github.com/naomiiiking"},
 	{Label: "linkedin", URL: "https://www.linkedin.com/in/naomi-king-0374891ba/"},
-	{Label: "website", URL: "https://"},
 }
 
 const rawPortrait = 

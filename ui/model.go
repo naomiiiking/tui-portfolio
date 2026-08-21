@@ -13,14 +13,12 @@ type section int
 
 const (
 	sectionAbout section = iota
-	sectionExperience
 	sectionLinks
 	sectionCount
 )
 
 var sectionNames = []string{"about", "links"}
 
-// Model is the root Bubbletea model.
 type Model struct {
 	active section
 	width  int
@@ -109,8 +107,6 @@ func (m Model) body(w int) string {
 	switch m.active {
 	case sectionAbout:
 		contentStr = m.aboutBody(contentW)
-	case sectionExperience:
-		contentStr = m.experienceBody(contentW)
 	case sectionLinks:
 		contentStr = m.linksBody(contentW)
 	}
@@ -154,21 +150,6 @@ func (m Model) aboutBody(w int) string {
 		}
 	}
 
-	return lipgloss.NewStyle().Width(w).Render(sb.String())
-}
-
-// Experience page todo: rebrand to projects
-func (m Model) experienceBody(w int) string {
-	var sb strings.Builder
-	for i, project := range content.Projects {
-		if i > 0 {
-			sb.WriteString("\n")
-		}
-		sb.WriteString(labelStyle.Render(project.Title) + "\n")
-		sb.WriteString(hintStyle.Render(project.Description) + "\n")
-		sb.WriteString(hintStyle.Render(project.Link) + "\n")
-
-	}
 	return lipgloss.NewStyle().Width(w).Render(sb.String())
 }
 
