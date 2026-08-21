@@ -12,7 +12,7 @@ const Title =
 \_\ \/ \__,_|\___/|_| |_| |_|_|   / __ \| | | | | (_| |
 	    *					*    \/  \/|_|_| |_|\__, |
 				   *					*		 |___/ `
-const About = `Founding engineer for the AI Solutions team at Goodnotes. Modernising workflows and building internal, AI native applications for engineers, designers, insights and more. Not currently looking for work, but to expand my network with like minded women in STEM and AI Engineers in London.`
+const About = `Founding engineer for the AI Solutions team at Good Systems (formerly Goodnotes). Building AI systems for production. Not currently looking for work, but to expand my network with women in STEM and AI Engineers in London.`
 
 
 type Job struct {
@@ -52,20 +52,20 @@ var Skills = []Skill{
 	{
 		Title: "AI Development",
 		Examples: []string{
-			"LLMs: Fine tuning, orchestration, deployment, Ollama, Hugging Face",
-			"AI Frameworks: Langraph, Langchain, AI SDK, Claude/OpenAI SDK",
-			"RAG: Vector search pipelines with Chroma, FAISS, PGVector, AWS Bedrock",
-			"MCP: RBAC tool usage through OAuth 2 and OIDC",
-			"ML: Sckitlearn, PyTorch",
+			"LLMs: Fine tuning, orchestration, deployment, vision",
+			"AI Frameworks: Langraph, Langchain, AI SDK, HuggingFace",
+			"RAG: Advance production hybrid vector retrieval with pgvector, FAISS",
+			"MCP: Building custom remote MCP servers, RBAC tool usage through OAuth and OIDC",
+			"ML (Currently learning): Sckitlearn, PyTorch",
 		},
 	},
 	{
 		Title: "Software engineering",
 		Examples: []string{
-			"Programming: Python, Typescript, Go, SQL, currently learning Rust",
-			"Servers: Express.js, Bun",
+			"Programming: Python, Typescript",
+			"Servers: Flask, Express.js, Bun",
 			"Chat: ChatSDK, Bolt",
-			"Integrations: Fast API, webhooks",
+			"Integrations: Fast API, webhooks, REST, GraphQL",
 		},
 	},
 	{

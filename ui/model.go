@@ -18,7 +18,7 @@ const (
 	sectionCount
 )
 
-var sectionNames = []string{"about", "projects (WIP)", "links"}
+var sectionNames = []string{"about", "links"}
 
 // Model is the root Bubbletea model.
 type Model struct {
